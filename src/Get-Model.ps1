@@ -34,7 +34,7 @@ GitHub Repository: https://github.com/dfensgmbh/biz.dfch.PS.EnterpriseArchitect.
 PARAM
 (
 	[Parameter(Mandatory = $true, Position = 0)]
-	$EaModelRepository
+	$EaRepository
 	,
 	# Full name or part of it, for the model you want to search - this is not case sensitive
 	[Parameter(Mandatory = $false, ParameterSetName = 'searchByName')]
@@ -55,13 +55,13 @@ PROCESS
 {
 	if($PSCmdlet.ParameterSetName -eq 'list') 
 	{
-		$result = $EaModelRepository.Models;
+		$result = $EaRepository.Models;
 	}
 	else
 	{
 		If ($PSCmdlet.ParameterSetName -eq 'SearchByName') 
 		{
-			$result = $EaModelRepository.Models |? Name -match $Name;
+			$result = $EaRepository.Models |? Name -match $Name;
 		}
 	}
 	
