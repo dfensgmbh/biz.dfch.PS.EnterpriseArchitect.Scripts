@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName = 'biz.dfch.PS.System.Logging'; ModuleVersion = '1.4.1' }
 
-Function Get-Model {
+Function Get-Package {
 <#
 .SYNOPSIS
 
