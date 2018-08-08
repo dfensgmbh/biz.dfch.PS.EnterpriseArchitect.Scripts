@@ -55,13 +55,13 @@ PROCESS
 {
 	if($PSCmdlet.ParameterSetName -eq 'list') 
 	{
-		$result = $eaRepo.Models;
+		$result = $EaModelRepository.Models;
 	}
 	else
 	{
 		If ($PSCmdlet.ParameterSetName -eq 'SearchByName') 
 		{
-			$result = $eaRepo.Models |? Name -match $Name;
+			$result = $EaModelRepository.Models |? Name -match $Name;
 		}
 	}
 	
