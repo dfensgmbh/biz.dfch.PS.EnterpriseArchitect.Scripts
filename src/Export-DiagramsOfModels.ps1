@@ -55,30 +55,18 @@ PROCESS
 		if(0 -ge $packages.Count) { return; }
 	 
 		$eaModelRepositoryDirectory = Split-Path -Path $PathToEaModelRepository -Parent;
+		$eaProject = $ea.GetProjectInterface();
 	 
 		foreach($package in $packages)
 		{
 			$diagrams = Get-EaDiagrams $package;
 			foreach($diagram in $diagrams)
 			{
-				$diagramePdfPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}.pdf' -f $diagram.Name, $diagram.DiagramGUID);
-				$result = $diagram.SaveAsPDF($diagramePdfPathAndFileName);
+				$diagramPdfPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}.pdf' -f $diagram.Name, $diagram.DiagramGUID);
+				$result = $diagram.SaveAsPDF($diagramPdfPathAndFileName);
 
-				if(1 -ge $diagram.PageWidth -and 1 -ge $diagram.PageHeight)
-				{
-					$diagramImgPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}.png' -f $diagram.Name, $diagram.DiagramGUID);
-					$result = $diagram.SaveImagePage(1, 1, 0, 0, $diagramImgPathAndFileName, 0);
-					continue;
-				}
-
-				for($pageWidth = 1; $pageWidth -le $diagram.PageWidth; $pageWidth++)
-				{
-					for($pageHeight = 1; $pageHeight -le $diagram.PageHeight; $pageHeight++)
-					{
-						$diagramImgPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}-x{2}-y{3}.png' -f $diagram.Name, $diagram.DiagramGUID, $pageWidth, $pageHeight);
-						$result = $diagram.SaveImagePage($pageWidth, $pageHeight, 0, 0, $diagramImgPathAndFileName, 0);
-					}
-				}
+				$diagramImgPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}.png' -f $diagram.Name, $diagram.DiagramGUID);
+				$result = $eaProject.PutDiagramImageToFile($diagram.DiagramGUID, $diagramImgPathAndFileName, 1);
 			}
 			Process-Packages $package.Packages;
 		}
