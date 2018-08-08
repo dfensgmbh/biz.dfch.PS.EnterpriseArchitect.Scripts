@@ -47,7 +47,7 @@ PARAM
 	[ValidateNotNullOrEmpty()]
 	[String] $Name = $null
 	,
-	# Lists all available products
+	# Lists all available EA packages of the model/package
 	[Parameter(Mandatory = $false, ParameterSetName = 'list')]
 	[Switch] $ListAvailable
 )
@@ -71,7 +71,6 @@ PROCESS
 		}
 	}
 	
-	# $OutputParameter = $result
 	$OutputParameter = $result;
 }
 
