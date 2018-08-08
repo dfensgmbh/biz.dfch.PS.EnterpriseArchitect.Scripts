@@ -4,11 +4,11 @@ Function Get-Model {
 <#
 .SYNOPSIS
 
-Retrieves one or more model objects from the specified EA model repository.
+Retrieves one or more EA model objects from the specified EA model repository.
 
 .DESCRIPTION
 
-Retrieves one or more model objects from the specified EA model repository.
+Retrieves one or more EA model objects from the specified EA model repository.
 
 The EA model repository has to be provided as input by either positional or named parameter.
 
@@ -36,12 +36,12 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 0)]
 	$EaRepository
 	,
-	# Full name or part of it, for the model you want to search - this is not case sensitive
+	# Full name or part of it, for the EA model you want to search - this is not case sensitive
 	[Parameter(Mandatory = $false, ParameterSetName = 'searchByName')]
 	[ValidateNotNullOrEmpty()]
 	[String] $Name = $null
 	,
-	# Lists all available models of the repository
+	# Lists all available EA models of the repository
 	[Parameter(Mandatory = $false, ParameterSetName = 'list')]
 	[Switch] $ListAvailable
 )
