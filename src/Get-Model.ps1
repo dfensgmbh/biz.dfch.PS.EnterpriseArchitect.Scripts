@@ -41,7 +41,7 @@ PARAM
 	[ValidateNotNullOrEmpty()]
 	[String] $Name = $null
 	,
-	# Lists all available products
+	# Lists all available models of the repository
 	[Parameter(Mandatory = $false, ParameterSetName = 'list')]
 	[Switch] $ListAvailable
 )
@@ -65,7 +65,6 @@ PROCESS
 		}
 	}
 	
-	# $OutputParameter = $result
 	$OutputParameter = $result;
 }
 
