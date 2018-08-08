@@ -116,7 +116,7 @@ PROCESS
 	$imgDirectory = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img');
 	if (!(Test-Path $imgDirectory -PathType Container))
 	{
-		New-Item -ItemType Directory -Force -Path $imgDirectory;
+		$null = New-Item -ItemType Directory -Force -Path $imgDirectory;
 	}
 	
 	foreach($model in $ea.Models)
