@@ -50,6 +50,10 @@ PARAM
 	# Lists all available EA packages of the EA model/package
 	[Parameter(Mandatory = $false, ParameterSetName = 'list')]
 	[Switch] $ListAvailable
+	,
+	# Considers recursively all available EA packages of the EA model/package
+	[Parameter(Mandatory = $false)]
+	[Switch] $Recurse
 )
 
 BEGIN
@@ -59,15 +63,50 @@ BEGIN
 
 PROCESS
 {
-	if($PSCmdlet.ParameterSetName -eq 'list') 
+	function GetPackagesOfPackage($Package)
 	{
-		$result = $EaModelOrPackage.Packages;
+		$temp = [System.Collections.ArrayList]::new();
+
+		if ($Package.Packages.Count -gt 0)
+		{
+			foreach($p in $Package.Packages)
+			{
+				$temp.Add($p);
+				$tmp2 = GetPackagesOfPackage $p;
+				if ($tmp2.Count -gt 0)
+				{
+					$temp.AddRange($tmp2);
+				}
+			}
+		}
+		
+		return $temp;
+	}
+
+	if($Recurse)
+	{
+		$packages = [System.Collections.ArrayList]::new();
+		
+		foreach($package in $EaModelOrPackage.Packages)
+		{
+			$packages.Add($package);
+			$packages.AddRange((GetPackagesOfPackage $package));
+		}
 	}
 	else
 	{
-		If ($PSCmdlet.ParameterSetName -eq 'SearchByName') 
+		$packages = $EaModelOrPackage.Packages;
+	}
+	
+	if($PSCmdlet.ParameterSetName -eq 'list')
+	{
+		$result = $packages;
+	}
+	else
+	{
+		If ($PSCmdlet.ParameterSetName -eq 'SearchByName')
 		{
-			$result = $EaModelOrPackage.Packages |? Name -match $Name;
+			$result = $packages |? Name -match $Name;
 		}
 	}
 	
