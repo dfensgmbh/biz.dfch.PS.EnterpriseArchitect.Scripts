@@ -4,13 +4,13 @@ Function Get-Package {
 <#
 .SYNOPSIS
 
-Retrieves one or more package objects from the specified model or package.
+Retrieves one or more EA package objects from the specified EA model or EA package.
 
 .DESCRIPTION
 
-Retrieves one or more package objects from the specified model or package.
+Retrieves one or more EA package objects from the specified EA model or EA package.
 
-The EA model or package has to be provided as input by either positional or named parameter.
+The EA model or EA package has to be provided as input by either positional or named parameter.
 
 .EXAMPLE
 
@@ -42,12 +42,12 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 0)]
 	$EaModelOrPackage
 	,
-	# Full name or part of it, for the model you want to search - this is not case sensitive
+	# Full name or part of it, for the EA model you want to search - this is not case sensitive
 	[Parameter(Mandatory = $false, ParameterSetName = 'searchByName')]
 	[ValidateNotNullOrEmpty()]
 	[String] $Name = $null
 	,
-	# Lists all available EA packages of the model/package
+	# Lists all available EA packages of the EA model/package
 	[Parameter(Mandatory = $false, ParameterSetName = 'list')]
 	[Switch] $ListAvailable
 )
