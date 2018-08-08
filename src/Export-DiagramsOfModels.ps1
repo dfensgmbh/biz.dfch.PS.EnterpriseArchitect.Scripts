@@ -1,4 +1,4 @@
-function Export-DiagramsOfModel {
+function Export-DiagramsOfModels {
 <#
 .SYNOPSIS
 
@@ -51,68 +51,70 @@ PROCESS
 {
 	function Process-Packages($packages)
 	{
-	  if(!$packages) { throw [System.ArgumentNullException]::new('packages'); }
-	  if(0 -ge $packages.Count) { return; }
+		if(!$packages) { throw [System.ArgumentNullException]::new('packages'); }
+		if(0 -ge $packages.Count) { return; }
 	 
-	  foreach($package in $packages)
-	  {
-		$diagrams = Get-EaDiagrams $package;
-		foreach($diagram in $diagrams)
+		$modelPath = Split-Path -Path $PathToEaModelRepository -Parent;
+	 
+		foreach($package in $packages)
 		{
-		  $diagramePdfPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}.pdf' -f $diagram.Name, $diagram.DiagramGUID);
-		  $result = $diagram.SaveAsPDF($diagramePdfPathAndFileName)
-	 
-		  if(1 -ge $diagram.PageWidth -and 1 -ge $diagram.PageHeight)
-		  {
-			$diagramImgPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}.png' -f $diagram.Name, $diagram.DiagramGUID);
-			$result = $diagram.SaveImagePage(1, 1, 0, 0, $diagramImgPathAndFileName, 0);
-			continue;
-		  }
-	 
-		  for($pageWidth = 1; $pageWidth -le $diagram.PageWidth; $pageWidth++)
-		  {
-			for($pageHeight = 1; $pageHeight -le $diagram.PageHeight; $pageHeight++)
+			$diagrams = Get-EaDiagrams $package;
+			foreach($diagram in $diagrams)
 			{
-			  $diagramImgPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}-x{2}-y{3}.png' -f $diagram.Name, $diagram.DiagramGUID, $pageWidth, $pageHeight);
-			  $result = $diagram.SaveImagePage($pageWidth, $pageHeight, 0, 0, $diagramImgPathAndFileName, 0)
+				$diagramePdfPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}.pdf' -f $diagram.Name, $diagram.DiagramGUID);
+				$result = $diagram.SaveAsPDF($diagramePdfPathAndFileName);
+
+				if(1 -ge $diagram.PageWidth -and 1 -ge $diagram.PageHeight)
+				{
+					$diagramImgPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}.png' -f $diagram.Name, $diagram.DiagramGUID);
+					$result = $diagram.SaveImagePage(1, 1, 0, 0, $diagramImgPathAndFileName, 0);
+					continue;
+				}
+
+				for($pageWidth = 1; $pageWidth -le $diagram.PageWidth; $pageWidth++)
+				{
+					for($pageHeight = 1; $pageHeight -le $diagram.PageHeight; $pageHeight++)
+					{
+						$diagramImgPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}-x{2}-y{3}.png' -f $diagram.Name, $diagram.DiagramGUID, $pageWidth, $pageHeight);
+						$result = $diagram.SaveImagePage($pageWidth, $pageHeight, 0, 0, $diagramImgPathAndFileName, 0);
+					}
+				}
 			}
-		  }
+			Process-Packages $package.Packages;
 		}
-		Process-Packages $package.Packages;
-	  }
 	}
 	 
 	function Get-EaPackages($package)
 	{
-	  if(!$package) { throw [System.ArgumentNullException]::new('package'); }
-	 
-	  $result = [System.Collections.ArrayList]::new();
-	 
-	  foreach($item in $package.Packages)
-	  {
-		$null = $result.Add($item);
-	  }
-	 
-	  return $result;
+		if(!$package) { throw [System.ArgumentNullException]::new('package'); }
+
+		$result = [System.Collections.ArrayList]::new();
+
+		foreach($item in $package.Packages)
+		{
+			$null = $result.Add($item);
+		}
+
+		return $result;
 	}
 	 
 	function Get-EaDiagrams($package)
 	{
-	  if(!$package) { throw [System.ArgumentNullException]::new('package'); }
-	 
-	  $result = [System.Collections.ArrayList]::new();
-	 
-	  foreach($item in $package.Diagrams)
-	  {
-		$null = $result.Add($item);
-	  }
-	 
-	  return $result;
+		if(!$package) { throw [System.ArgumentNullException]::new('package'); }
+
+		$result = [System.Collections.ArrayList]::new();
+
+		foreach($item in $package.Diagrams)
+		{
+			$null = $result.Add($item);
+		}
+
+		return $result;
 	}
 	 
-	foreach($model in $ea.models) 
+	foreach($model in $ea.Models) 
 	{ 
-	  Process-Packages $model.packages;
+		Process-Packages $model.Packages;
 	}
 }
 
