@@ -20,7 +20,7 @@ EA model is passed as a positional parameter to the Cmdlet.
 
 .EXAMPLE
 
-Get-Package $package
+Get-Package $eaPackage
 
 EA package is passed as a positional parameter to the Cmdlet.
 
