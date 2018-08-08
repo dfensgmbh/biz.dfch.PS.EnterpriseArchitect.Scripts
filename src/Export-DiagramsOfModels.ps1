@@ -2,11 +2,11 @@ function Export-DiagramsOfModel {
 <#
 .SYNOPSIS
 
-Exports diagrams of a specific EA model to PDF.
+Exports diagrams of all models in an EA model repository to PDF and PNG.
 
 .DESCRIPTION
 
-Exports diagrams of a specific EA model to PDF.
+Exports diagrams of all models in an EA model repository to PDF and PNG.
 
 .LINK
 
