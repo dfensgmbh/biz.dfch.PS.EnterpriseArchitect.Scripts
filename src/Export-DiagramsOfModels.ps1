@@ -54,19 +54,19 @@ PROCESS
 		if(!$packages) { throw [System.ArgumentNullException]::new('packages'); }
 		if(0 -ge $packages.Count) { return; }
 	 
-		$modelPath = Split-Path -Path $PathToEaModelRepository -Parent;
+		$eaModelRepositoryDirectory = Split-Path -Path $PathToEaModelRepository -Parent;
 	 
 		foreach($package in $packages)
 		{
 			$diagrams = Get-EaDiagrams $package;
 			foreach($diagram in $diagrams)
 			{
-				$diagramePdfPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}.pdf' -f $diagram.Name, $diagram.DiagramGUID);
+				$diagramePdfPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}.pdf' -f $diagram.Name, $diagram.DiagramGUID);
 				$result = $diagram.SaveAsPDF($diagramePdfPathAndFileName);
 
 				if(1 -ge $diagram.PageWidth -and 1 -ge $diagram.PageHeight)
 				{
-					$diagramImgPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}.png' -f $diagram.Name, $diagram.DiagramGUID);
+					$diagramImgPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}.png' -f $diagram.Name, $diagram.DiagramGUID);
 					$result = $diagram.SaveImagePage(1, 1, 0, 0, $diagramImgPathAndFileName, 0);
 					continue;
 				}
@@ -75,7 +75,7 @@ PROCESS
 				{
 					for($pageHeight = 1; $pageHeight -le $diagram.PageHeight; $pageHeight++)
 					{
-						$diagramImgPathAndFileName = Join-Path -Path $modelPath -ChildPath ('img\{0}-{1}-x{2}-y{3}.png' -f $diagram.Name, $diagram.DiagramGUID, $pageWidth, $pageHeight);
+						$diagramImgPathAndFileName = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img\{0}-{1}-x{2}-y{3}.png' -f $diagram.Name, $diagram.DiagramGUID, $pageWidth, $pageHeight);
 						$result = $diagram.SaveImagePage($pageWidth, $pageHeight, 0, 0, $diagramImgPathAndFileName, 0);
 					}
 				}
@@ -83,7 +83,7 @@ PROCESS
 			Process-Packages $package.Packages;
 		}
 	}
-	 
+	
 	function Get-EaPackages($package)
 	{
 		if(!$package) { throw [System.ArgumentNullException]::new('package'); }
@@ -111,9 +111,16 @@ PROCESS
 
 		return $result;
 	}
-	 
-	foreach($model in $ea.Models) 
-	{ 
+	
+	$eaModelRepositoryDirectory = Split-Path -Path $PathToEaModelRepository -Parent;
+	$imgDirectory = Join-Path -Path $eaModelRepositoryDirectory -ChildPath ('img');
+	if (!(Test-Path $imgDirectory -PathType Container))
+	{
+		New-Item -ItemType Directory -Force -Path $imgDirectory;
+	}
+	
+	foreach($model in $ea.Models)
+	{
 		Process-Packages $model.Packages;
 	}
 }
