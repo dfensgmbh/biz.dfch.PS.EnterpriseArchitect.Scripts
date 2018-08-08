@@ -43,6 +43,8 @@ PARAM
 
 BEGIN
 {
+	trap { Log-Exception $_; break; }
+
 	$OutputParameter = $null;
 
 	# adding the EA reference
@@ -61,12 +63,12 @@ PROCESS
 	$result = $ea.OpenFile($Path);
 	Contract-Assert($result);
 	
-	return $ea;
+	$OutputParameter = $ea;
 }
 
 END
 {
-	# N/A
+	return $OutputParameter;
 }
 }
 
