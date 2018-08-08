@@ -64,7 +64,7 @@ PROCESS
 			
 		}
 		
-		$result = $eaRepo.Models | Name -match $Name;
+		$result = $eaRepo.Models |? Name -match $Name;
 	}
 	
 	# $OutputParameter = $result
