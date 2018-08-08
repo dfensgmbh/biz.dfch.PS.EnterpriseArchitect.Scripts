@@ -10,7 +10,7 @@ Closes a specific EA model repository.
 
 Closes a specific EA model repository.
 
-The EA model repository object has to be provided as input by either positional or named parameter of type string.
+The EA model repository object has to be provided as input by either positional or named parameter.
 
 .EXAMPLE
 
@@ -37,7 +37,7 @@ PARAM
 
 BEGIN
 {
-	# N/A
+	trap { Log-Exception $_; break; }
 }
 
 PROCESS
