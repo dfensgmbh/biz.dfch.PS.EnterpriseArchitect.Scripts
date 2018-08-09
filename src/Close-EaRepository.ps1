@@ -42,11 +42,15 @@ BEGIN
 
 PROCESS
 {
+	trap { Log-Exception $_; break; }
+	
 	# N/A
 }
 
 END
 {
+	trap { Log-Exception $_; break; }
+	
 	$EaModelRepository.CloseFile();
 	$EaModelRepository.Exit();
 }

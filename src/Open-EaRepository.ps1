@@ -59,6 +59,8 @@ BEGIN
 
 PROCESS
 {
+	trap { Log-Exception $_; break; }
+	
 	# loading the EA model repository
 	$result = $ea.OpenFile($Path);
 	Contract-Assert($result);

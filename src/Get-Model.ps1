@@ -53,6 +53,8 @@ BEGIN
 
 PROCESS
 {
+	trap { Log-Exception $_; break; }
+	
 	if($PSCmdlet.ParameterSetName -eq 'list') 
 	{
 		$result = $EaRepository.Models;

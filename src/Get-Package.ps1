@@ -63,6 +63,8 @@ BEGIN
 
 PROCESS
 {
+	trap { Log-Exception $_; break; }
+	
 	function GetPackagesOfPackage($Package)
 	{
 		$temp = [System.Collections.ArrayList]::new();
