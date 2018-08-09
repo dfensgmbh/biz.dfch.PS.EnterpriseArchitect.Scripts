@@ -73,11 +73,11 @@ PROCESS
 		{
 			foreach($p in $Package.Packages)
 			{
-				$temp.Add($p);
+				$null = $temp.Add($p);
 				$tmp2 = GetPackagesOfPackage $p;
 				if ($tmp2.Count -gt 0)
 				{
-					$temp.AddRange($tmp2);
+					$null = $temp.AddRange($tmp2);
 				}
 			}
 		}
@@ -91,8 +91,12 @@ PROCESS
 		
 		foreach($package in $EaModelOrPackage.Packages)
 		{
-			$packages.Add($package);
-			$packages.AddRange((GetPackagesOfPackage $package));
+			$null = $packages.Add($package);
+			$temp = GetPackagesOfPackage $package;
+			if ($temp.Count -gt 0)
+			{
+				$null = $packages.AddRange($temp);
+			}
 		}
 	}
 	else
