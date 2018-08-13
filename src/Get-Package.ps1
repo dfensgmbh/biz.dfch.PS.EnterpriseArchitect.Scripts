@@ -70,15 +70,22 @@ PROCESS
 	{
 		$temp = [System.Collections.ArrayList]::new();
 
-		if ($Package.Packages.Count -gt 0)
+		if ($Package.Packages -ne $null)
 		{
-			foreach($p in $Package.Packages)
+			foreach($pkg in $Package.Packages)
 			{
-				$null = $temp.Add($p);
-				$tmp2 = GetPackagesOfPackage $p;
-				if ($tmp2.Count -gt 0)
+				$null = $temp.Add($pkg);
+				$temp2 = GetPackagesOfPackage $pkg;
+				if ($temp2 -ne $null)
 				{
-					$null = $temp.AddRange($tmp2);
+					if ($temp2.Count -gt 0)
+					{
+						$null = $temp.AddRange($temp2);
+					}
+					else 
+					{
+						$null = $temp.Add($temp2);
+					}
 				}
 			}
 		}
@@ -94,9 +101,16 @@ PROCESS
 		{
 			$null = $packages.Add($package);
 			$temp = GetPackagesOfPackage $package;
-			if ($temp.Count -gt 0)
+			if ($temp -ne $null)
 			{
-				$null = $packages.AddRange($temp);
+				if ($temp.Count -gt 0)
+				{
+					$null = $packages.AddRange($temp);
+				}
+				else
+				{
+					$null = $packages.Add($temp);
+				}
 			}
 		}
 	}
