@@ -44,15 +44,19 @@ PROCESS
 {
 	trap { Log-Exception $_; break; }
 	
-	# N/A
+	$OutputParameter = $false;
+	
+	$EaModelRepository.CloseFile();
+	$EaModelRepository.Exit();
+	
+	$OutputParameter = $true;
 }
 
 END
 {
 	trap { Log-Exception $_; break; }
 	
-	$EaModelRepository.CloseFile();
-	$EaModelRepository.Exit();
+	return $OutputParameter;
 }
 }
 
