@@ -48,6 +48,17 @@ Describe "Close-EaRepository" {
 			# Assert
 			$result | Should Be $true;
 		}
+		
+		It "ClosesEaRepositoryAndReturnsTrueWhenInvokingByPipingValidOpenedEaRepository" {
+			
+			# Arrange
+			
+			# Act
+			$result = $repository | Close-EaRepository;
+			
+			# Assert
+			$result | Should Be $true;
+		}
 	}
 }
 
