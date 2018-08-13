@@ -10,7 +10,7 @@ Closes a specific EA model repository.
 
 Closes a specific EA model repository.
 
-The EA model repository object has to be provided as input by either positional or named parameter.
+The EA model repository object has to be provided as input by either pipeline, positional or named parameter.
 
 .EXAMPLE
 
