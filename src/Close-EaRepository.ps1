@@ -14,13 +14,13 @@ The EA model repository object has to be provided as input by either pipe, posit
 
 .EXAMPLE
 
-Close-EaRepository $eaRepo
+$result = Close-EaRepository $eaRepo
 
 EA model repository is passed as a positional parameter to the Cmdlet.
 
 .EXAMPLE
 
-$eaRepo | Close-EaRepository
+$result = $eaRepo | Close-EaRepository
 
 EA model repository is piped to the Cmdlet.
 
