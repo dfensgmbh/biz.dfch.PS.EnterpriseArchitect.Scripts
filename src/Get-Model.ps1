@@ -33,6 +33,7 @@ GitHub Repository: https://github.com/dfensgmbh/biz.dfch.PS.EnterpriseArchitect.
 )]
 PARAM
 (
+	[ValidateNotNull()]
 	[Parameter(Mandatory = $true, Position = 0)]
 	$EaRepository
 	,
