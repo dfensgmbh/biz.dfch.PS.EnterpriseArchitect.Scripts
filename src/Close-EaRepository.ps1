@@ -32,7 +32,7 @@ GitHub Repository: https://github.com/dfensgmbh/biz.dfch.PS.EnterpriseArchitect.
 PARAM
 (
 	[Parameter(Mandatory = $true, Position = 0)]
-	$EaModelRepository
+	$EaRepository
 )
 
 BEGIN
@@ -46,8 +46,8 @@ PROCESS
 	
 	$OutputParameter = $false;
 	
-	$EaModelRepository.CloseFile();
-	$EaModelRepository.Exit();
+	$EaRepository.CloseFile();
+	$EaRepository.Exit();
 	
 	$OutputParameter = $true;
 }
