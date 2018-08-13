@@ -126,7 +126,7 @@ Describe "Get-Package" {
 		}
 
 		AfterEach {
-			Close-EaRepository $eaRepository;
+			$null = Close-EaRepository $eaRepository;
 		}
 	}
 }

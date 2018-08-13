@@ -69,7 +69,7 @@ Describe "Open-EaRepository" {
 		}
 		
 		AfterEach {
-			Close-EaRepository $repository;
+			$null = Close-EaRepository $repository;
 		}
 	}
 }

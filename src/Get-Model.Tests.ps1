@@ -86,7 +86,7 @@ Describe "Get-Model" {
 		}
 		
 		AfterEach {
-			Close-EaRepository $eaRepository;
+			$null = Close-EaRepository $eaRepository;
 		}
 	}
 }
