@@ -12,40 +12,44 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 0)]
 	[string] $PathToEaProject
 	,
-	[ValidateScript( { Test-Path $_ -PathType Leaf; } )]
 	[ValidateNotNullOrEmpty()]
 	[Parameter(Mandatory = $true, Position = 1)]
+	[string] $EaDiagramName
+	,
+	[ValidateScript( { Test-Path $_ -PathType Leaf; } )]
+	[ValidateNotNullOrEmpty()]
+	[Parameter(Mandatory = $true, Position = 2)]
 	[string] $PathToVisioFile
 	,
 	[ValidateScript( { Test-Path $_ -PathType Container; } )]
 	[ValidateNotNullOrEmpty()]
 	[Parameter(Mandatory = $false)]
-	[string] $EaScriptsDirectory = "C:\src\biz.dfch.PS.EnterpriseArchitect.Scripts\src\"
+	[string] $VisioScriptsDirectory = "C:\src\biz.dfch.PS.Visio.Scripts\src"
 )
 
 BEGIN
 {
 	trap { Log-Exception $_; break; }
 	
-	$eaScriptFiles = @("Open-EaRepository.ps1", "Get-Model.ps1", "Get-Package.ps1", "Close-EaRepository.ps1");
+	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Diagram.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
 	
 	foreach ($eaScriptFile in $eaScriptFiles)
 	{
-		$path = Join-Path $EaScriptsDirectory $eaScriptFile;
+		Contract-Assert (Test-Path -Path $eaScriptFile -PathType Leaf);
+		
+		# dot source script files
+		. $eaScriptFile;
+	}
+	
+	$visioScriptFiles = @("Add-ShapeToPage.ps1", "Close-VisioDocument.ps1", "Get-Page.ps1", "Get-Shape.ps1", "Open-VisioDocument.ps1", "Save-VisioDocument.ps1");
+	
+	foreach ($visioScriptFile in $visioScriptFiles)
+	{
+		$path = Join-Path $VisioScriptsDirectory $visioScriptFile;
 		Contract-Assert (Test-Path -Path $path -PathType Leaf);
 		
 		# dot source script files
 		. $path;
-	}
-	
-	$visioScriptFiles = @(".\Add-ShapeToPage.ps1", ".\Close-VisioDocument.ps1", ".\Get-Page.ps1", ".\Get-Shape.ps1", ".\Open-VisioDocument.ps1", ".\Save-VisioDocument.ps1");
-	
-	foreach ($visioScriptFile in $visioScriptFiles)
-	{
-		Contract-Assert (Test-Path -Path $visioScriptFile -PathType Leaf);
-		
-		# dot source script files
-		. $visioScriptFile;
 	}
 }
 
