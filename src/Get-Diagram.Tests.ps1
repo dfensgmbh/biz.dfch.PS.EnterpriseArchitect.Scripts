@@ -90,6 +90,20 @@ Describe "Get-Diagram" {
 			$result.Count | Should Be 2;
 		}
 		
+		It "RetrievesAndReturnsDiagramByDiagramGUIDOfSpecifiedPackageWhenInvokingWithValidEaPackageAndDiagramGUID" {
+			
+			# Arrange
+			$diagramGUID = [guid]::Parse("59FBD8BF-A3D7-40e3-BAE4-51E4D2997F4D");
+			
+			# Act
+			$result = Get-Diagram $eaPackage -DiagramGUID $diagramGUID;
+			
+			# Assert
+			$result | Should Not Be $null;
+			$result.DiagramGUID | Should Be $diagramGUID;
+			$result.Name | Should Be "class-diagram";
+		}
+		
 		It "RetrievesAndReturnsDiagramByNameOfSpecifiedPackageWhenInvokingWithValidEaPackageAndName" {
 			
 			# Arrange

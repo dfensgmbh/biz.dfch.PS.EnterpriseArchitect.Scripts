@@ -43,6 +43,9 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 0)]
 	$EaModelOrPackage
 	,
+	[Parameter(Mandatory = $false, ParameterSetName = 'searchByDiagramGUID')]
+	[guid] $DiagramGUID
+	,
 	# Full name or part of it, for the EA diagram you want to search - this is not case sensitive
 	[Parameter(Mandatory = $false, ParameterSetName = 'searchByName')]
 	[ValidateNotNullOrEmpty()]
@@ -138,6 +141,10 @@ PROCESS
 		if ($PSCmdlet.ParameterSetName -eq 'SearchByName')
 		{
 			$result = $diagrams |? Name -match $Name;
+		}
+		if ($PSCmdlet.ParameterSetName -eq 'searchByDiagramGUID')
+		{
+			$result = $diagrams |? DiagramGUID -match $DiagramGUID.ToString();
 		}
 	}
 	
