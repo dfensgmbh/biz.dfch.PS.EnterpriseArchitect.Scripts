@@ -116,15 +116,11 @@ PROCESS
 		
 		$diagrams = [System.Collections.ArrayList]::new();
 		
-		foreach($pkg in $packages)
+		foreach($p in $packages)
 		{
-			if ($pkg.Diagrams.Count -gt 0)
+			foreach($d in $p.Diagrams)
 			{
-				$null = $diagrams.AddRange($pkg.Diagrams);
-			}
-			else
-			{
-				$null = $diagrams.Add($pkg.Diagrams);
+				$null = $diagrams.Add($d);
 			}
 		}
 	}

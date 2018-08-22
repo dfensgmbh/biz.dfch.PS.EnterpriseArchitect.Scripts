@@ -112,7 +112,7 @@ Describe "Get-Diagram" {
 			
 			# Assert
 			$result | Should Not Be $null;
-			$result.Count | Should Be 5;
+			$result.Count | Should Be 4;
 		}
 		
 		It "RetrievesDiagramsOfSpecifiedPackageRecursivelyAndReturnsThemWhenInvokingWithValidEaPackageAndRecurseSwitch" {
