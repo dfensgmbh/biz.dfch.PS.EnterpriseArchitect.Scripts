@@ -12,8 +12,11 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 0)]
 	[string] $PathToEaProject
 	,
+	[Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'searchByDiagramGUID')]
+	[guid] $EaDiagramGUID
+	,
 	[ValidateNotNullOrEmpty()]
-	[Parameter(Mandatory = $true, Position = 1)]
+	[Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'searchByEaDiagramName')]
 	[string] $EaDiagramName
 	,
 	[ValidateScript( { Test-Path $_ -PathType Leaf; } )]
@@ -59,8 +62,6 @@ PROCESS
 
 	$OutputParameter = $false;
 	
-	$eaModelName = "ch.kpt";
-	$eaPackageName = "Dekompositionsmodell";
 	$visioPageName = "Mapping";
 	
 	$xStart = 1.70;
@@ -68,60 +69,70 @@ PROCESS
 	$xGap = 1.10;
 	$yGap = 0.60;
 	
-	
 	$eaRepo = Open-EaRepository $PathToEaProject;
 	$eaModel = Get-Model $eaRepo -Name $eaModelName;
-	$eaPackage = Get-Package $eaModel -Name $eaPackageName -Recurse;
-	Contract-Assert ($eaPackage);
 	
-	$eaSubpackages = Get-Package $eaPackage -Recurse;
-	
-	$visioDoc = Open-VisioDocument $PathToVisioFile;
-	$visioPage = Get-Page -VisioDoc $visioDoc -Name $visioPageName;
-	Contract-Assert ($visioPage);
-	
-	$y = $yStart;
-	
-	foreach ($subPkg in $eaSubpackages)
+	if ($PSCmdlet.ParameterSetName -eq 'searchByDiagramGUID')
 	{
-		$count = 0;
-		$x = $xStart;
-		
-		$components = $subPkg.Elements |? MetaType -eq 'Component';
-		
-		if ($null -eq $components)
-		{
-			continue;
-		}
-		
-		foreach ($comp in $components)
-		{
-			$count++;
-		
-			$shape = Get-Shape $visioPage -EaGuid $comp.ElementGUID;
-			
-			if ($null -eq $shape)
-			{
-				$addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $x -PositionY $y -Height 0.48 -Width 0.88 -EaGuid $comp.ElementGUID -ShapeText $comp.Name;
-			}
-			
-			$x = $x + $xGap;
-			
-			if (($count % 13) -eq 0)
-			{
-				$x = $xStart;
-				$y = $y - $yGap;
-			}
-		}
-		
-		$y = $y - $yGap;
+		$diagram = Get-Diagram $eaModel -Recurse -DiagramGUID $EaDiagramGUID;
 	}
+	if ($PSCmdlet.ParameterSetName -eq 'searchByEaDiagramName')
+	{
+		$diagram = Get-Diagram $eaModel -Recurse -Name $EaDiagramName
+	}
+
+	Contract-Assert ($diagram);
 	
-	$result = $visioDoc | Save-VisioDocument
-	Contract-Assert($result);
+	# DFTODO - get diagram components
+	# DFTODO - recognize type of diagram components
+	# DFTODO - transform coordinates according format of visio
 	
-	$result = $visioDoc | Close-VisioDocument;
-	Contract-Assert($result);
+	# $visioDoc = Open-VisioDocument $PathToVisioFile;
+	# $visioPage = Get-Page -VisioDoc $visioDoc -Name $visioPageName;
+	# Contract-Assert ($visioPage);
+	
+	# $y = $yStart;
+	
+	# foreach ($subPkg in $eaSubpackages)
+	# {
+		# $count = 0;
+		# $x = $xStart;
+		
+		# $components = $subPkg.Elements |? MetaType -eq 'Component';
+		
+		# if ($null -eq $components)
+		# {
+			# continue;
+		# }
+		
+		# foreach ($comp in $components)
+		# {
+			# $count++;
+		
+			# $shape = Get-Shape $visioPage -EaGuid $comp.ElementGUID;
+			
+			# if ($null -eq $shape)
+			# {
+				# $addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $x -PositionY $y -Height 0.48 -Width 0.88 -EaGuid $comp.ElementGUID -ShapeText $comp.Name;
+			# }
+			
+			# $x = $x + $xGap;
+			
+			# if (($count % 13) -eq 0)
+			# {
+				# $x = $xStart;
+				# $y = $y - $yGap;
+			# }
+		# }
+		
+		# $y = $y - $yGap;
+	# }
+	
+	# $result = $visioDoc | Save-VisioDocument
+	# Contract-Assert($result);
+	
+	# $result = $visioDoc | Close-VisioDocument;
+	# Contract-Assert($result);
 	
 	$result = $eaRepo | Close-EaRepository;
 	Contract-Assert($result);
