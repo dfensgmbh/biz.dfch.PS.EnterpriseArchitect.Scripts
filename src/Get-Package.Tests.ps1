@@ -41,6 +41,17 @@ Describe "Get-Package" {
 			
 			#Assert
 		}
+		
+		It "ThrowsParameterBindingValidationExceptionWhenInvokingWithEmptyName" {
+			
+			# Arrange
+			$eaModel = New-Object -ComObject Scripting.Dictionary;
+			
+			# Act
+			{ Get-Package -EaModelOrPackage $eaModel -Name ""; } | Should ThrowException 'ParameterBindingValidationException';
+			
+			#Assert
+		}
 	}
 	
 	Context "Get-Package-PositiveTests" {
