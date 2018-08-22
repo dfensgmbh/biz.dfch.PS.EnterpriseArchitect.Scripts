@@ -46,7 +46,7 @@ PARAM
 	# Full name or part of it, for the EA model you want to search - this is not case sensitive
 	[Parameter(Mandatory = $false, ParameterSetName = 'searchByName')]
 	[ValidateNotNullOrEmpty()]
-	[String] $Name = $null
+	[string] $Name = $null
 	,
 	# Lists all available EA packages of the EA model/package
 	[Parameter(Mandatory = $false, ParameterSetName = 'list')]
