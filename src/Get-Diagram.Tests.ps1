@@ -60,7 +60,7 @@ Describe "Get-Diagram" {
 		$pathToEaRepository = "$here\SampleModel.eapx";
 		
 		BeforeEach {
-			$eaRepository = Open-EaRepository -Path $pathToEaRepository;
+			$eaRepository = Open-EaRepository $pathToEaRepository;
 			$eaModel = Get-Model $eaRepository;
 			$eaPackage = Get-Package $eaModel -Recurse -Name "1";
 		}
