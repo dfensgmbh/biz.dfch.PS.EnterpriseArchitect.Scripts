@@ -128,11 +128,11 @@ PROCESS
 	}
 	else
 	{
-		If ($PSCmdlet.ParameterSetName -eq 'SearchByName')
+		if ($PSCmdlet.ParameterSetName -eq 'SearchByName')
 		{
 			$result = $packages |? Name -match $Name;
 		}
-		If ($PSCmdlet.ParameterSetName -eq 'searchByPackageGUID')
+		if ($PSCmdlet.ParameterSetName -eq 'searchByPackageGUID')
 		{
 			$result = $packages |? PackageGUID -match $PackageGUID.ToString();
 		}
