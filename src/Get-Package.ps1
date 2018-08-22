@@ -43,6 +43,9 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 0)]
 	$EaModelOrPackage
 	,
+	[Parameter(Mandatory = $false, ParameterSetName = 'searchByPackageGUID')]
+	[guid] $PackageGUID
+	,
 	# Full name or part of it, for the EA model you want to search - this is not case sensitive
 	[Parameter(Mandatory = $false, ParameterSetName = 'searchByName')]
 	[ValidateNotNullOrEmpty()]
@@ -128,6 +131,10 @@ PROCESS
 		If ($PSCmdlet.ParameterSetName -eq 'SearchByName')
 		{
 			$result = $packages |? Name -match $Name;
+		}
+		If ($PSCmdlet.ParameterSetName -eq 'searchByPackageGUID')
+		{
+			$result = $packages |? PackageGUID -match $PackageGUID.ToString();
 		}
 	}
 	

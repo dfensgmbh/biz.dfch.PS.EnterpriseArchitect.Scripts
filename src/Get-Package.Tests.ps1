@@ -76,6 +76,20 @@ Describe "Get-Package" {
 			$result.Count | Should Be 3;
 		}
 		
+		It "RetrievesAndReturnsPackageByPackageGUIDOfSpecifiedModelWhenInvokingWithValidEaModelAndPackageGUID" {
+			
+			# Arrange
+			$packageGUID = [guid]::Parse("640331EF-8A11-42e1-8A71-2214C0A7A655");
+			
+			# Act
+			$result = Get-Package $eaModel -PackageGUID $packageGUID;
+			
+			# Assert
+			$result | Should Not Be $null;
+			$result.PackageGUID | Should Be $packageGUID;
+			$result.Name | Should Be "biz";
+		}
+		
 		It "RetrievesAndReturnsPackageByNameOfSpecifiedModelWhenInvokingWithValidEaModelAndName" {
 			
 			# Arrange
@@ -110,6 +124,20 @@ Describe "Get-Package" {
 			# Assert
 			$result | Should Not Be $null;
 			$result.Count | Should Be 2;
+		}
+		
+		It "RetrievesAndReturnsPackageByPackageGUIDOfSpecifiedPackageWhenInvokingWithValidEaPackageAndPackageGUID" {
+			
+			# Arrange
+			$packageGUID = [guid]::Parse("33D3D912-54C7-452d-84AC-56171F5A4821");
+			
+			# Act
+			$result = Get-Package $eaPackage -PackageGUID $packageGUID;
+			
+			# Assert
+			$result | Should Not Be $null;
+			$result.PackageGUID | Should Be $packageGUID;
+			$result.Name | Should Be "sharedop";
 		}
 		
 		It "RetrievesAndReturnsPackageByNameOfSpecifiedPackageWhenInvokingWithValidEaPackageAndName" {
