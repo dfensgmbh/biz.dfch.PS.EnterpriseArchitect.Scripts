@@ -73,6 +73,7 @@ Describe "Get-Diagram" {
 			$result = Get-Diagram $eaModel;
 			
 			# Assert
+			$eaModel | Should Not Be $null;
 			$result | Should Be $null;
 		}
 		
@@ -84,6 +85,7 @@ Describe "Get-Diagram" {
 			$result = Get-Diagram $eaPackage;
 			
 			# Assert
+			$eaPackage | Should Not Be $null;
 			$result | Should Not Be $null;
 			$result.Count | Should Be 2;
 		}
