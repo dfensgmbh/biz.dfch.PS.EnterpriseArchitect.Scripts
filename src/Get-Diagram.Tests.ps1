@@ -93,7 +93,7 @@ Describe "Get-Diagram" {
 		It "RetrievesAndReturnsDiagramByNameOfSpecifiedPackageWhenInvokingWithValidEaPackageAndName" {
 			
 			# Arrange
-			$diagramName = "class-diagram";
+			$diagramName = "another-class-diagram";
 			
 			# Act
 			$result = Get-Diagram $eaPackage -Name $diagramName;
