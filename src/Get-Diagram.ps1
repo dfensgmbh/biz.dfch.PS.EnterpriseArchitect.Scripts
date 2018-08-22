@@ -93,6 +93,12 @@ PROCESS
 		return $temp;
 	}
 
+	$diagrams = [System.Collections.ArrayList]::new();
+	foreach($diagram in $EaModelOrPackage.Diagrams)
+	{
+		$null = $diagrams.Add($diagram);
+	}
+	
 	if($Recurse)
 	{
 		$packages = [System.Collections.ArrayList]::new();
@@ -113,9 +119,7 @@ PROCESS
 				}
 			}
 		}
-		
-		$diagrams = [System.Collections.ArrayList]::new();
-		
+
 		foreach($p in $packages)
 		{
 			foreach($d in $p.Diagrams)
@@ -123,10 +127,6 @@ PROCESS
 				$null = $diagrams.Add($d);
 			}
 		}
-	}
-	else
-	{
-		$diagrams = $EaModelOrPackage.Diagrams;
 	}
 	
 	if($PSCmdlet.ParameterSetName -eq 'list')
