@@ -135,6 +135,7 @@ PROCESS
 	$visioPageHeightCell = "PageHeight";
 	$visioPrintPageOrientationCell = "PrintPageOrientation";
 	$visioFillForegroundCell = "FillForegnd";
+	$visioCharColorCell = "Char.Color";
 	$visioLandscapeOrientation = "2";
 	$visioPortraitOrientation = "1";
 	
@@ -205,6 +206,9 @@ PROCESS
 		
 		# set shape color according EA diagram object
 		$shape.Cells($visioFillForegroundCell).FormulaU = $converter.ConvertToRgbColorString($diagramObj.BackgroundColor);
+		
+		# set text color to black
+		$shape.Cells($visioCharColorCell).FormulaU = "RGB(0,0,0)";
 	}
 	
 	# DFTODO - remove shapes from visio that do not exist anymore in EA
