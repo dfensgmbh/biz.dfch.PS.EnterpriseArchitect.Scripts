@@ -104,7 +104,7 @@ BEGIN
 				$yScaling = $this.visioDimensionY / $this.eaDimensionY;
 				
 				$visioPosX = $eaShapeInfo.positionX1 * $xScaling;
-				$visioPosY = ($this.eaDimensionY + $eaShapeInfo.positionY1) * $yScaling;
+				$visioPosY = ($this.eaDimensionY + $eaShapeInfo.positionY2) * $yScaling;
 				$visioWidth = ($eaShapeInfo.positionX2 - $eaShapeInfo.positionX1) * $xScaling;
 				$visioHeight = [math]::abs($eaShapeInfo.positionY2 - $eaShapeInfo.positionY1) * $yScaling;
 				[VisioShapeInfo]$visioShapeInfo = [VisioShapeInfo]::new($visioPosX, $visioPosY, $visioWidth, $visioHeight);
