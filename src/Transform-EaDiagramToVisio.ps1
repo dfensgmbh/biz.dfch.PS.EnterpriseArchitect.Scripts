@@ -206,6 +206,8 @@ PROCESS
 		# set shape color according EA diagram object
 		$shape.Cells($visioFillForegroundCell).FormulaU = $converter.ConvertToRgbColorString($diagramObj.BackgroundColor);
 	}
+	
+	# DFTODO - remove shapes from visio that do not exist anymore in EA
 
 	# close visio and enterprise architect
 	$result = $visioDoc | Save-VisioDocument
