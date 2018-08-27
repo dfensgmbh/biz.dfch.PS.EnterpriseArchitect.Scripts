@@ -108,9 +108,16 @@ BEGIN
 				$visioWidth = ($eaShapeInfo.positionX2 - $eaShapeInfo.positionX1) * $xScaling;
 				$visioHeight = [math]::abs($eaShapeInfo.positionY2 - $eaShapeInfo.positionY1) * $yScaling;
 				[VisioShapeInfo]$visioShapeInfo = [VisioShapeInfo]::new($visioPosX, $visioPosY, $visioWidth, $visioHeight);
-				# DFTODO - convert background color
 				
 				return $visioShapeInfo;
+			}
+		[string] ConvertToRgbColorString([Int32]$eaColor)
+			{
+				$hexColor = "{0:x6}" -f $eaColor;
+				$r = [Convert]::ToInt32($hexColor.substring(0, 2), 16);
+				$g = [Convert]::ToInt32($hexColor.substring(2, 2), 16);
+				$b = [Convert]::ToInt32($hexColor.substring(4, 2), 16);
+				return "RGB({0}, {1}, {2})" -f $r, $g, $b;
 			}
 	}
 }
@@ -127,6 +134,7 @@ PROCESS
 	$visioPageWidthCell = "PageWidth";
 	$visioPageHeightCell = "PageHeight";
 	$visioPrintPageOrientationCell = "PrintPageOrientation";
+	$visioFillForegroundCell = "FillForegnd";
 	$visioLandscapeOrientation = "2";
 	$visioPortraitOrientation = "1";
 	
@@ -194,7 +202,8 @@ PROCESS
 		}
 		# DFTODO - else, adjust position of shape
 		
-		# DFTODO - set color
+		# set shape color according EA diagram object
+		$shape.Cells($visioFillForegroundCell).FormulaU = $converter.ConvertToRgbColorString($diagramObj.BackgroundColor);
 	}
 
 	# close visio and enterprise architect
