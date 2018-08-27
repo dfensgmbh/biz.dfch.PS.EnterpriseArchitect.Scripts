@@ -179,9 +179,9 @@ PROCESS
 		if ($null -eq $shape)
 		{
 			[EaShapeInfo]$eaShapeInfo = [EaShapeInfo]::new($diagramObj.left, $diagramObj.top, $diagramObj.right, $diagramObj.bottom);
-
 			$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
 
+			# add shape (rectangle) to visio
 			# DFTODO - get text of shape
 			# DFTODO - adjust parameters EaGUID and ShapeText
 			$addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
