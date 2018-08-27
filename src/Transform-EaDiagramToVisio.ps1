@@ -184,9 +184,7 @@ PROCESS
 			# add shape (rectangle) to visio
 			# DFTODO - get text of shape
 			# DFTODO - adjust parameters EaGUID and ShapeText
-			$addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
-
-			# DFTODO - send pools to background
+			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
 			
 			# DFTODO - set color
 		}
@@ -194,6 +192,7 @@ PROCESS
 		# DFTODO - else, adjust position of shape
 	}
 
+	# close visio and enterprise architect
 	$result = $visioDoc | Save-VisioDocument
 	Contract-Assert($result);
 	
