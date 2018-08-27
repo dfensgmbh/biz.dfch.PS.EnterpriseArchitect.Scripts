@@ -187,6 +187,11 @@ PROCESS
 			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
 			
 			# DFTODO - set color
+			# send shape backward according sequence attribute of enterprise architect (https://www.sparxsystems.com/enterprise_architect_user_guide/10/automation_and_scripting/diagramobjects.html)
+			for ($i = 1; $i -lt $diagramObj.Sequence; $i++)
+			{
+				$shape.SendBackward();
+			}
 		}
 		
 		# DFTODO - else, adjust position of shape
