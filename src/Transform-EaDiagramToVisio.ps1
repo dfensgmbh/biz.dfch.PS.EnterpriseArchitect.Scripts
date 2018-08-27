@@ -34,16 +34,17 @@ BEGIN
 {
 	trap { Log-Exception $_; break; }
 
+	# dot source enterprise architect script files
 	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Diagram.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
 	
 	foreach ($eaScriptFile in $eaScriptFiles)
 	{
 		Contract-Assert (Test-Path -Path $eaScriptFile -PathType Leaf);
 		
-		# dot source script files
 		. $eaScriptFile;
 	}
 	
+	# dot source visio script files
 	$visioScriptFiles = @("Add-ShapeToPage.ps1", "Close-VisioDocument.ps1", "Get-Page.ps1", "Get-Shape.ps1", "Open-VisioDocument.ps1", "Save-VisioDocument.ps1");
 	
 	foreach ($visioScriptFile in $visioScriptFiles)
@@ -51,7 +52,6 @@ BEGIN
 		$path = Join-Path $VisioScriptsDirectory $visioScriptFile;
 		Contract-Assert (Test-Path -Path $path -PathType Leaf);
 		
-		# dot source script files
 		. $path;
 	}
 
