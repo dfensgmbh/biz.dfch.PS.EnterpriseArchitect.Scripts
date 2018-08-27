@@ -171,7 +171,7 @@ PROCESS
 	
 	foreach ($diagramObj in $diagram.DiagramObjects)
 	{
-		# DFTODO - check, how to get GUID
+		# DFTODO - get GUID and search shape by GUID
 		#$shape = Get-Shape $visioPage -EaGuid $diagram.;
 
 		if ($null -eq $shape)
@@ -180,11 +180,16 @@ PROCESS
 
 			$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
 
+			# DFTODO - get text of shape
 			# DFTODO - adjust parameters EaGUID and ShapeText
 			$addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
 
+			# DFTODO - send pools to background
+			
 			# DFTODO - set color
 		}
+		
+		# DFTODO - else, adjust position of shape
 	}
 
 	$result = $visioDoc | Save-VisioDocument
