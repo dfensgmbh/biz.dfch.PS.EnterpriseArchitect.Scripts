@@ -121,6 +121,7 @@ PROCESS
 
 	$OutputParameter = $false;
 
+	# definition of local variables
 	$eaLandscapeOrientation = "L";
 	$visioPageName = "Mapping";
 	$visioPageWidthCell = "PageWidth";
@@ -166,6 +167,7 @@ PROCESS
 		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioPortraitOrientation;
 	}
 
+	# initialise converter
 	$visioPageSheet = $visioPage.PageSheet;
 	[ShapeInfoConverter]$converter = [ShapeInfoConverter]::new($diagram.cx, $diagram.cy, $visioPageSheet.Cells($visioPageWidthCell).ResultIU, $visioPageSheet.Cells($visioPageHeightCell).ResultIU);
 	
