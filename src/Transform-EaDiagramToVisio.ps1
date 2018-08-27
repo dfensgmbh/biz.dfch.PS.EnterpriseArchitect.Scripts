@@ -33,7 +33,7 @@ PARAM
 BEGIN
 {
 	trap { Log-Exception $_; break; }
-	
+
 	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Diagram.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
 	
 	foreach ($eaScriptFile in $eaScriptFiles)
@@ -54,6 +54,65 @@ BEGIN
 		# dot source script files
 		. $path;
 	}
+
+	Class EaShapeInfo
+	{
+		[long] $positionX1
+		[long] $positionY1
+		[long] $positionX2
+		[long] $positionY2
+		EaShapeInfo([long]$x1, [long]$y1, [long]$x2, [long]$y2)
+			{
+				$this.positionX1 = $x1
+				$this.positionY1 = $y1
+				$this.positionX2 = $x2
+				$this.positionY2 = $y2
+			}
+	}
+	
+	Class VisioShapeInfo
+	{
+		[double] $positionX
+		[double] $positionY
+		[double] $width
+		[double] $height
+		VisioShapeInfo([double]$x, [double]$y, [double]$width, [double]$height)
+			{
+				$this.positionX = $x
+				$this.positionY = $y
+				$this.width = $width
+				$this.height = $height
+			}
+	}
+	
+	Class ShapeInfoConverter
+	{
+		[long] $eaDimensionX
+		[long] $eaDimensionY
+		[double] $visioDimensionX
+		[double] $visioDimensionY
+		ShapeInfoConverter([long]$eaDimX, [long]$eaDimY, [double]$visioDimX, [double]$visioDimY)
+			{
+				$this.eaDimensionX = $eaDimX
+				$this.eaDimensionY = $eaDimY
+				$this.visioDimensionX = $visioDimX
+				$this.visioDimensionY = $visioDimY
+			}	
+		[VisioShapeInfo] ConvertToVisioShapeInfo($eaShapeInfo)
+			{
+				$xScaling = $this.visioDimensionX / $this.eaDimensionX;
+				$yScaling = $this.visioDimensionY / $this.eaDimensionY;
+				
+				$visioPosX = $eaShapeInfo.positionX1 * $xScaling;
+				$visioPosY = ($this.eaDimensionY + $eaShapeInfo.positionY1) * $yScaling;
+				$visioWidth = ($eaShapeInfo.positionX2 - $eaShapeInfo.positionX1) * $xScaling;
+				$visioHeight = [math]::abs($eaShapeInfo.positionY2 - $eaShapeInfo.positionY1) * $yScaling;
+				[VisioShapeInfo]$visioShapeInfo = [VisioShapeInfo]::new($visioPosX, $visioPosY, $visioWidth, $visioHeight);
+				# DFTODO - convert background color
+				
+				return $visioShapeInfo;
+			}
+	}
 }
 
 PROCESS
@@ -61,78 +120,78 @@ PROCESS
 	trap { Log-Exception $_; break; }
 
 	$OutputParameter = $false;
-	
+
+	$eaLandscapeOrientation = "L";
 	$visioPageName = "Mapping";
+	$visioPageWidthCell = "PageWidth";
+	$visioPageHeightCell = "PageHeight";
+	$visioPrintPageOrientationCell = "PrintPageOrientation";
+	$visioLandscapeOrientation = "2";
+	$visioPortraitOrientation = "1";
 	
-	$xStart = 1.70;
-	$yStart = 11.0;
-	$xGap = 1.10;
-	$yGap = 0.60;
-	
+	# open EA repository and get model
 	$eaRepo = Open-EaRepository $PathToEaProject;
-	$eaModel = Get-Model $eaRepo -Name $eaModelName;
+	Contract-Assert($eaRepo);
+	$eaModel = Get-Model $eaRepo;
+	Contract-Assert($eaModel);
 	
+	# get EA diagram
 	if ($PSCmdlet.ParameterSetName -eq 'searchByDiagramGUID')
 	{
 		$diagram = Get-Diagram $eaModel -Recurse -DiagramGUID $EaDiagramGUID;
 	}
 	if ($PSCmdlet.ParameterSetName -eq 'searchByEaDiagramName')
 	{
-		$diagram = Get-Diagram $eaModel -Recurse -Name $EaDiagramName
+		$diagram = Get-Diagram $eaModel -Recurse -Name $EaDiagramName;
+	}
+	Contract-Assert ($diagram);
+
+	# open visio document and get visio page
+	$visioDoc = Open-VisioDocument $PathToVisioFile;
+	Contract-Assert ($visioDoc);
+	$visioPage = Get-Page -VisioDoc $visioDoc -Name $visioPageName;
+	Contract-Assert ($visioPage);
+
+	# set visio page orientation according to EA diagram orientation
+	if ($diagram.Orientation -eq $eaLandscapeOrientation)
+	{
+		$visioPage.PageSheet.Cells($visioPageWidthCell).FormulaU = "420 mm";
+		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = "297 mm";
+		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioLandscapeOrientation;
+	}
+	else 
+	{
+		$visioPage.PageSheet.Cells($visioPageWidthCell).FormulaU = "297 mm";
+		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = "420 mm";
+		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioPortraitOrientation;
 	}
 
-	Contract-Assert ($diagram);
+	$visioPageSheet = $visioPage.PageSheet;
+	[ShapeInfoConverter]$converter = [ShapeInfoConverter]::new($diagram.cx, $diagram.cy, $visioPageSheet.Cells($visioPageWidthCell).ResultIU, $visioPageSheet.Cells($visioPageHeightCell).ResultIU);
 	
-	# DFTODO - get diagram components
-	# DFTODO - recognize type of diagram components
-	# DFTODO - transform coordinates according format of visio
+	foreach ($diagramObj in $diagram.DiagramObjects)
+	{
+		# DFTODO - check, how to get GUID
+		#$shape = Get-Shape $visioPage -EaGuid $diagram.;
+
+		if ($null -eq $shape)
+		{
+			[EaShapeInfo]$eaShapeInfo = [EaShapeInfo]::new($diagramObj.left, $diagramObj.top, $diagramObj.right, $diagramObj.bottom);
+
+			$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
+
+			# DFTODO - adjust parameters EaGUID and ShapeText
+			$addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
+
+			# DFTODO - set color
+		}
+	}
+
+	$result = $visioDoc | Save-VisioDocument
+	Contract-Assert($result);
 	
-	# $visioDoc = Open-VisioDocument $PathToVisioFile;
-	# $visioPage = Get-Page -VisioDoc $visioDoc -Name $visioPageName;
-	# Contract-Assert ($visioPage);
-	
-	# $y = $yStart;
-	
-	# foreach ($subPkg in $eaSubpackages)
-	# {
-		# $count = 0;
-		# $x = $xStart;
-		
-		# $components = $subPkg.Elements |? MetaType -eq 'Component';
-		
-		# if ($null -eq $components)
-		# {
-			# continue;
-		# }
-		
-		# foreach ($comp in $components)
-		# {
-			# $count++;
-		
-			# $shape = Get-Shape $visioPage -EaGuid $comp.ElementGUID;
-			
-			# if ($null -eq $shape)
-			# {
-				# $addedShape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $x -PositionY $y -Height 0.48 -Width 0.88 -EaGuid $comp.ElementGUID -ShapeText $comp.Name;
-			# }
-			
-			# $x = $x + $xGap;
-			
-			# if (($count % 13) -eq 0)
-			# {
-				# $x = $xStart;
-				# $y = $y - $yGap;
-			# }
-		# }
-		
-		# $y = $y - $yGap;
-	# }
-	
-	# $result = $visioDoc | Save-VisioDocument
-	# Contract-Assert($result);
-	
-	# $result = $visioDoc | Close-VisioDocument;
-	# Contract-Assert($result);
+	$result = $visioDoc | Close-VisioDocument;
+	Contract-Assert($result);
 	
 	$result = $eaRepo | Close-EaRepository;
 	Contract-Assert($result);
