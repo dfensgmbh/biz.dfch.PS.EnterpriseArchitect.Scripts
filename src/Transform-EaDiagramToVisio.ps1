@@ -183,7 +183,8 @@ PROCESS
 	{
 		# DFTODO - get GUID and search shape by GUID
 		#$shape = Get-Shape $visioPage -EaGuid $diagram.;
-
+		$shape = $null;
+		
 		if ($null -eq $shape)
 		{
 			[EaShapeInfo]$eaShapeInfo = [EaShapeInfo]::new($diagramObj.left, $diagramObj.top, $diagramObj.right, $diagramObj.bottom);
