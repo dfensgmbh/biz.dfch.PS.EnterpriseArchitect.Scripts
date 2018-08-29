@@ -184,7 +184,12 @@ PROCESS
 	}
 	
 	# retrieve all EA elements
-	$eaElements = Get-Element $eaModel -Recurse;
+	$tempEaElements = Get-Element $eaModel -Recurse;
+	$eaElements = @{};
+	foreach ($tempEaElement in $tempEaElements)
+	{
+		$eaElements[$tempEaElement.ElementID] = $tempEaElement;
+	}
 
 	# initialise converter
 	$visioPageSheet = $visioPage.PageSheet;
@@ -193,7 +198,7 @@ PROCESS
 	foreach ($diagramObj in $diagram.DiagramObjects)
 	{
 		# search for EA element of diagram object
-		$eaElement = $eaElements |? ElementID -eq $diagramObj.ElementID;
+		$eaElement = $eaElements[$diagramObj.ElementID];
 		
 		# check, if shape already exists on visio page
 		$shape = Get-Shape $visioPage -EaGuid $eaElement.ElementGUID;
