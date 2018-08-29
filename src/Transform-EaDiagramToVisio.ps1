@@ -132,6 +132,8 @@ PROCESS
 
 	# definition of local variables
 	$eaLandscapeOrientation = "L";
+	$a3Height = "420 mm";
+	$a3Width = "297 mm";
 	$visioPageName = "Mapping";
 	$visioPageWidthCell = "PageWidth";
 	$visioPageHeightCell = "PageHeight";
@@ -167,14 +169,14 @@ PROCESS
 	# set visio page orientation according to EA diagram orientation
 	if ($diagram.Orientation -eq $eaLandscapeOrientation)
 	{
-		$visioPage.PageSheet.Cells($visioPageWidthCell).FormulaU = "420 mm";
-		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = "297 mm";
+		$visioPage.PageSheet.Cells($visioPageWidthCell).FormulaU = $a3Height;
+		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = $a3Width;
 		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioLandscapeOrientation;
 	}
 	else 
 	{
-		$visioPage.PageSheet.Cells($visioPageWidthCell).FormulaU = "297 mm";
-		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = "420 mm";
+		$visioPage.PageSheet.Cells($visioPageWidthCell).FormulaU = $a3Width;
+		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = $a3Height;
 		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioPortraitOrientation;
 	}
 
