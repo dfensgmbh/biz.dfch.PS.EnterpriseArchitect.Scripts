@@ -24,6 +24,10 @@ PARAM
 	[Parameter(Mandatory = $true, Position = 2)]
 	[string] $PathToVisioFile
 	,
+	[ValidateNotNullOrEmpty()]
+	[Parameter(Mandatory = $true, Position = 3)]
+	[string] $VisioPageName
+	,
 	[ValidateScript( { Test-Path $_ -PathType Container; } )]
 	[ValidateNotNullOrEmpty()]
 	[Parameter(Mandatory = $false)]
@@ -134,7 +138,6 @@ PROCESS
 	$eaLandscapeOrientation = "L";
 	$a3Height = "420 mm";
 	$a3Width = "297 mm";
-	$visioPageName = "Mapping";
 	$visioPageWidthCell = "PageWidth";
 	$visioPageHeightCell = "PageHeight";
 	$visioPrintPageOrientationCell = "PrintPageOrientation";
