@@ -113,6 +113,7 @@ BEGIN
 			}
 		[string] ConvertToRgbColorString([Int32]$eaColor)
 			{
+				# DFTODO - fix color conversion
 				$hexColor = "{0:x6}" -f $eaColor;
 				$r = [Convert]::ToInt32($hexColor.substring(0, 2), 16);
 				$g = [Convert]::ToInt32($hexColor.substring(2, 2), 16);
