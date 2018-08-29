@@ -138,7 +138,7 @@ PROCESS
 	}
 	else
 	{
-		if ($PSCmdlet.ParameterSetName -eq 'SearchByName')
+		if ($PSCmdlet.ParameterSetName -eq 'searchByName')
 		{
 			$result = $diagrams |? Name -match $Name;
 		}
