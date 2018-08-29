@@ -39,7 +39,7 @@ BEGIN
 	trap { Log-Exception $_; break; }
 
 	# dot source enterprise architect script files
-	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Diagram.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
+	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Element.ps1", ".\Get-Diagram.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
 	
 	foreach ($eaScriptFile in $eaScriptFiles)
 	{
