@@ -104,6 +104,7 @@ BEGIN
 				$yScaling = $this.visioDimensionY / $this.eaDimensionY;
 				
 				$visioPosX = $eaShapeInfo.positionX1 * $xScaling;
+				# y position values in EA are negative as coordinate system starts in the top left corner
 				$visioPosY = ($this.eaDimensionY + $eaShapeInfo.positionY2) * $yScaling;
 				$visioWidth = ($eaShapeInfo.positionX2 - $eaShapeInfo.positionX1) * $xScaling;
 				$visioHeight = [math]::abs($eaShapeInfo.positionY2 - $eaShapeInfo.positionY1) * $yScaling;
