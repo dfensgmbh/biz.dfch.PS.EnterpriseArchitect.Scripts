@@ -204,9 +204,7 @@ PROCESS
 			$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
 
 			# add shape (rectangle) to visio
-			# DFTODO - get text of shape
-			# DFTODO - adjust parameter ShapeText
-			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid $eaElement.ElementGUID -ShapeText "tralala";
+			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid $eaElement.ElementGUID -ShapeText $eaElement.Name;
 			
 			# send shape backward according sequence attribute of enterprise architect (https://www.sparxsystems.com/enterprise_architect_user_guide/10/automation_and_scripting/diagramobjects.html)
 			for ($i = 1; $i -lt $diagramObj.Sequence; $i++)
