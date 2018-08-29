@@ -152,7 +152,7 @@ PROCESS
 	$eaModel = Get-Model $eaRepo;
 	Contract-Assert($eaModel);
 	
-	# get EA diagram
+	# retrieve EA diagram
 	if ($PSCmdlet.ParameterSetName -eq 'searchByDiagramGUID')
 	{
 		$diagram = Get-Diagram $eaModel -Recurse -DiagramGUID $EaDiagramGUID;
@@ -182,6 +182,9 @@ PROCESS
 		$visioPage.PageSheet.Cells($visioPageHeightCell).FormulaU = $a3Height;
 		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioPortraitOrientation;
 	}
+	
+	# retrieve all EA elements
+	$eaElements = Get-Element $eaModel -Recurse;
 
 	# initialise converter
 	$visioPageSheet = $visioPage.PageSheet;
@@ -189,9 +192,11 @@ PROCESS
 	
 	foreach ($diagramObj in $diagram.DiagramObjects)
 	{
-		# DFTODO - get GUID and search shape by GUID
-		#$shape = Get-Shape $visioPage -EaGuid $diagram.;
-		$shape = $null;
+		# search for EA element of diagram object
+		$eaElement = $eaElements |? ElementID -eq $diagramObj.ElementID;
+		
+		# check, if shape already exists on visio page
+		$shape = Get-Shape $visioPage -EaGuid $eaElement.ElementGUID;
 		
 		if ($null -eq $shape)
 		{
@@ -200,8 +205,8 @@ PROCESS
 
 			# add shape (rectangle) to visio
 			# DFTODO - get text of shape
-			# DFTODO - adjust parameters EaGUID and ShapeText
-			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid ([guid]::NewGuid()) -ShapeText "tralala";
+			# DFTODO - adjust parameter ShapeText
+			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid $eaElement.ElementGUID -ShapeText "tralala";
 			
 			# send shape backward according sequence attribute of enterprise architect (https://www.sparxsystems.com/enterprise_architect_user_guide/10/automation_and_scripting/diagramobjects.html)
 			for ($i = 1; $i -lt $diagramObj.Sequence; $i++)
