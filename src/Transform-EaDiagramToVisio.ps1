@@ -185,10 +185,10 @@ PROCESS
 	
 	# retrieve all EA elements
 	$tempEaElements = Get-Element $eaModel -Recurse;
-	$eaElements = @{};
+	$eaElementsByElementId = @{};
 	foreach ($tempEaElement in $tempEaElements)
 	{
-		$eaElements[$tempEaElement.ElementID] = $tempEaElement;
+		$eaElementsByElementId[$tempEaElement.ElementID] = $tempEaElement;
 	}
 
 	# initialise converter
@@ -198,7 +198,7 @@ PROCESS
 	foreach ($diagramObj in $diagram.DiagramObjects)
 	{
 		# search for EA element of diagram object
-		$eaElement = $eaElements[$diagramObj.ElementID];
+		$eaElement = $eaElementsByElementId[$diagramObj.ElementID];
 		
 		# check, if shape already exists on visio page
 		$shape = Get-Shape $visioPage -EaGuid $eaElement.ElementGUID;
