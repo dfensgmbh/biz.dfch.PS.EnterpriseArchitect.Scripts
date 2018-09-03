@@ -219,7 +219,11 @@ PROCESS
 				$shape.SendBackward();
 			}
 		}
-		# DFTODO - else, adjust position of shape
+		else
+		{
+			
+			# DFTODO - else, adjust position of shape
+		}
 		
 		# set shape text according EA element
 		$shape.Text = $eaElement.Name;
