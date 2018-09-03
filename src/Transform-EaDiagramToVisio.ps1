@@ -221,6 +221,9 @@ PROCESS
 		}
 		# DFTODO - else, adjust position of shape
 		
+		# set shape text according EA element
+		$shape.Text = $eaElement.Name;
+		
 		# set shape color according EA diagram object
 		$shape.Cells($visioFillForegroundCell).FormulaU = $converter.ConvertToRgbColorString($diagramObj.BackgroundColor);
 		
