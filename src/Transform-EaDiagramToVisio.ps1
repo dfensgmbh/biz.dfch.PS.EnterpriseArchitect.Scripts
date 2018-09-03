@@ -49,7 +49,7 @@ BEGIN
 	}
 	
 	# dot source visio script files
-	$visioScriptFiles = @("Add-ShapeToPage.ps1", "Close-VisioDocument.ps1", "Get-Page.ps1", "Get-Shape.ps1", "Open-VisioDocument.ps1", "Save-VisioDocument.ps1");
+	$visioScriptFiles = @("Add-ShapeToPage.ps1", "Close-VisioDocument.ps1", "Get-Page.ps1", "Get-Shape.ps1", "Open-VisioDocument.ps1", "Set-Shape.ps1", "Save-VisioDocument.ps1");
 	
 	foreach ($visioScriptFile in $visioScriptFiles)
 	{
@@ -220,7 +220,6 @@ PROCESS
 		}
 		else
 		{
-			
 			# DFTODO - else, adjust position of shape
 		}
 		
