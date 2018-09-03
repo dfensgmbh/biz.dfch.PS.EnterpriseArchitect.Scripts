@@ -118,7 +118,6 @@ BEGIN
 			}
 		[string] ConvertToRgbColorString([Int32]$eaColor)
 			{
-				# DFTODO - fix color conversion
 				$hexColor = "{0:x6}" -f $eaColor;
 				$b = [Convert]::ToInt32($hexColor.substring(0, 2), 16);
 				$g = [Convert]::ToInt32($hexColor.substring(2, 2), 16);
@@ -211,7 +210,7 @@ PROCESS
 			$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
 
 			# add shape (rectangle) to visio
-			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid $eaElement.ElementGUID -ShapeText $eaElement.Name;
+			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid $eaElement.ElementGUID -Text $eaElement.Name;
 			
 			# send shape backward according sequence attribute of enterprise architect (https://www.sparxsystems.com/enterprise_architect_user_guide/10/automation_and_scripting/diagramobjects.html)
 			for ($i = 1; $i -lt $diagramObj.Sequence; $i++)
