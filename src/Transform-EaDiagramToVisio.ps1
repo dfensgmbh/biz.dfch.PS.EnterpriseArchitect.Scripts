@@ -186,9 +186,11 @@ PROCESS
 	# retrieve all EA elements
 	$tempEaElements = Get-Element $eaModel -Recurse;
 	$eaElementsByElementId = @{};
+	$eaElementsByElementGUID = @{};
 	foreach ($tempEaElement in $tempEaElements)
 	{
 		$eaElementsByElementId[$tempEaElement.ElementID] = $tempEaElement;
+		$eaElementsByElementGUID[$tempEaElement.ElementGUID] = $tempEaElement;
 	}
 
 	# initialise converter
@@ -226,7 +228,21 @@ PROCESS
 		$shape.Cells($visioCharColorCell).FormulaU = "RGB(0,0,0)";
 	}
 	
-	# DFTODO - remove shapes from visio that do not exist anymore in EA
+	# remove shapes from visio that do not exist anymore in EA
+	$shapes = Get-Shape -Page $visioPageName;
+	foreach ($s in $shapes)
+	{
+		if ($s.Data1 -eq $null)
+		{
+			continue;
+		}
+		
+		$e = $eaElementsByElementGUID[$s.Data1];
+		if ($e -eq $null)
+		{
+			$s | Remove-Shape;
+		}
+	}
 
 	# close visio and enterprise architect
 	$result = $visioDoc | Save-VisioDocument
