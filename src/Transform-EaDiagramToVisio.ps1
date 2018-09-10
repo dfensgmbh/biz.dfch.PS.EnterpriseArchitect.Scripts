@@ -209,11 +209,11 @@ PROCESS
 		# check, if shape already exists on visio page
 		$shape = Get-Shape $visioPage -EaGuid $eaElement.ElementGUID;
 		
+		[EaShapeInfo]$eaShapeInfo = [EaShapeInfo]::new($diagramObj.left, $diagramObj.top, $diagramObj.right, $diagramObj.bottom);
+		$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
+
 		if ($null -eq $shape)
 		{
-			[EaShapeInfo]$eaShapeInfo = [EaShapeInfo]::new($diagramObj.left, $diagramObj.top, $diagramObj.right, $diagramObj.bottom);
-			$visioShapeInfo = $converter.ConvertToVisioShapeInfo($eaShapeInfo);
-
 			# add shape (rectangle) to visio
 			$shape = Add-ShapeToPage -VisioDoc $visioDoc -PageName $visioPageName -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -EaGuid $eaElement.ElementGUID -Text $eaElement.Name;
 			
