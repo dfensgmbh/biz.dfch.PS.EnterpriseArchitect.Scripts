@@ -39,7 +39,8 @@ BEGIN
 	trap { Log-Exception $_; break; }
 
 	# dot source enterprise architect script files
-	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Element.ps1", ".\Get-Diagram.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
+	# DFTODO - improve by creating module and require it in script
+	$eaScriptFiles = @(".\Close-EaRepository.ps1", ".\Get-Diagram.ps1", ".\Get-Element.ps1", ".\Get-Model.ps1", ".\Get-Package.ps1", ".\Open-EaRepository.ps1");
 	
 	foreach ($eaScriptFile in $eaScriptFiles)
 	{
@@ -49,7 +50,8 @@ BEGIN
 	}
 	
 	# dot source visio script files
-	$visioScriptFiles = @("Add-ShapeToPage.ps1", "Close-VisioDocument.ps1", "Get-Page.ps1", "Get-Shape.ps1", "Open-VisioDocument.ps1", "Set-Shape.ps1", "Save-VisioDocument.ps1");
+	# DFTODO - improve by creating module and require it in script
+	$visioScriptFiles = @("Add-ShapeToPage.ps1", "Close-VisioDocument.ps1", "Get-Page.ps1", "Get-Shape.ps1", "Open-VisioDocument.ps1", "Save-VisioDocument.ps1", "Set-Shape.ps1");
 	
 	foreach ($visioScriptFile in $visioScriptFiles)
 	{
@@ -112,12 +114,14 @@ BEGIN
 				$visioPosY = ($this.eaDimensionY + $eaShapeInfo.positionY2) * $yScaling;
 				$visioWidth = ($eaShapeInfo.positionX2 - $eaShapeInfo.positionX1) * $xScaling;
 				$visioHeight = [math]::abs($eaShapeInfo.positionY2 - $eaShapeInfo.positionY1) * $yScaling;
+				
 				[VisioShapeInfo]$visioShapeInfo = [VisioShapeInfo]::new($visioPosX, $visioPosY, $visioWidth, $visioHeight);
 				
 				return $visioShapeInfo;
 			}
 		[string] ConvertToRgbColorString([Int32]$eaColor)
 			{
+				# convert EA color to RGB
 				$hexColor = "{0:x6}" -f $eaColor;
 				$b = [Convert]::ToInt32($hexColor.substring(0, 2), 16);
 				$g = [Convert]::ToInt32($hexColor.substring(2, 2), 16);
@@ -135,6 +139,7 @@ PROCESS
 
 	# definition of local variables
 	$eaLandscapeOrientation = "L";
+	# DFTODO - support multiple formats
 	$a3Height = "420 mm";
 	$a3Width = "297 mm";
 	$visioPageWidthCell = "PageWidth";
@@ -182,7 +187,7 @@ PROCESS
 		$visioPage.PageSheet.Cells($visioPrintPageOrientationCell).FormulaU = $visioPortraitOrientation;
 	}
 	
-	# retrieve all EA elements
+	# retrieve all EA elements and add to two different hash tables
 	$tempEaElements = Get-Element $eaModel -Recurse;
 	$eaElementsByElementId = @{};
 	$eaElementsByElementGUID = @{};
