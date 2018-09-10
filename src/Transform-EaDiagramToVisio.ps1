@@ -220,11 +220,8 @@ PROCESS
 		}
 		else
 		{
-			# DFTODO - else, adjust position of shape
+			$shape = Set-Shape $shape -PositionX $visioShapeInfo.positionX -PositionY $visioShapeInfo.positionY -Height $visioShapeInfo.height -Width $visioShapeInfo.width -Text $eaElement.Name;
 		}
-		
-		# set shape text according EA element
-		$shape.Text = $eaElement.Name;
 		
 		# set shape color according EA diagram object
 		$shape.Cells($visioFillForegroundCell).FormulaU = $converter.ConvertToRgbColorString($diagramObj.BackgroundColor);
