@@ -249,7 +249,13 @@ PROCESS
 		$element = $eaElementsByElementGUID[$s.Data1];
 		if ($null -eq $element)
 		{
+			$s | Remove-Shape;
+			continue;
 		}
+		
+		# remove shape, if not exists in EA diagram
+		$diagramObject = $diagram.DiagramObjects |? ElementID -eq $s.ElementID;
+		if ($null -eq $diagramObject)
 		{
 			$s | Remove-Shape;
 		}
