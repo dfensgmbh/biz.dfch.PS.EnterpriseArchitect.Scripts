@@ -235,11 +235,12 @@ PROCESS
 		$shape.Cells($visioCharColorCell).FormulaU = "RGB(0,0,0)";
 	}
 	
-	# remove shapes from visio that do not exist anymore in EA
+	# remove shapes from visio that do not exist in EA diagram anymore
 	$shapes = Get-Shape -Page $visioPageName;
 	foreach ($s in $shapes)
 	{
-		if ($s.Data1 -eq $null)
+		# ignore non mapped shapes (mapped > Data1 contains EA GUID)
+		if ($null -eq $s.Data1)
 		{
 			continue;
 		}
