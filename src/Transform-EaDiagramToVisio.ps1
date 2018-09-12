@@ -245,8 +245,11 @@ PROCESS
 			continue;
 		}
 		
-		$e = $eaElementsByElementGUID[$s.Data1];
-		if ($e -eq $null)
+		# remove shape, if not exists in EA anymore
+		$element = $eaElementsByElementGUID[$s.Data1];
+		if ($null -eq $element)
+		{
+		}
 		{
 			$s | Remove-Shape;
 		}
