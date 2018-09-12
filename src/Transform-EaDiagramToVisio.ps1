@@ -236,7 +236,7 @@ PROCESS
 	}
 	
 	# remove shapes from visio that do not exist in EA diagram anymore
-	$shapes = Get-Shape -Page $visioPageName;
+	$shapes = Get-Shape -Page $visioPage;
 	foreach ($s in $shapes)
 	{
 		# ignore non mapped shapes (mapped > Data1 contains EA GUID)
@@ -246,7 +246,8 @@ PROCESS
 		}
 		
 		# remove shape, if not exists in EA anymore
-		$element = $eaElementsByElementGUID[$s.Data1];
+		$key = "{{{0}}}" -f $s.Data1;
+		$element = $eaElementsByElementGUID[$key];
 		if ($null -eq $element)
 		{
 			$s | Remove-Shape;
