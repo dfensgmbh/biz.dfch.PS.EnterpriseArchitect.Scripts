@@ -255,7 +255,7 @@ PROCESS
 		}
 		
 		# remove shape, if not exists in EA diagram
-		$diagramObject = $diagram.DiagramObjects |? ElementID -eq $s.ElementID;
+		$diagramObject = $diagram.DiagramObjects |? ElementID -eq $element.ElementID;
 		if ($null -eq $diagramObject)
 		{
 			$s | Remove-Shape;
