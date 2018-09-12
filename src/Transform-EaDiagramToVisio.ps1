@@ -250,7 +250,7 @@ PROCESS
 		$element = $eaElementsByElementGUID[$key];
 		if ($null -eq $element)
 		{
-			$s | Remove-Shape;
+			$null = $s | Remove-Shape;
 			continue;
 		}
 		
@@ -258,7 +258,7 @@ PROCESS
 		$diagramObject = $diagram.DiagramObjects |? ElementID -eq $element.ElementID;
 		if ($null -eq $diagramObject)
 		{
-			$s | Remove-Shape;
+			$null = $s | Remove-Shape;
 		}
 	}
 
@@ -272,7 +272,7 @@ PROCESS
 	$result = $eaRepo | Close-EaRepository;
 	Contract-Assert($result);
 	
-	$OutputParameter = $true;
+	$OutputParameter = $result;
 }
 
 END
