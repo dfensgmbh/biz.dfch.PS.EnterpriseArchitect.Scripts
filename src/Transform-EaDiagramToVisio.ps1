@@ -133,7 +133,20 @@ BEGIN
 
 PROCESS
 {
-	trap { Log-Exception $_; break; }
+	trap
+	{
+		Log-Exception $_;
+		
+		if ($null -ne $visioDoc)
+		{
+			$visioDoc | Close-VisioDocument;
+		}
+		if ($null -ne $eaRepo)
+		{
+			$eaRepo | Close-EaRepository;
+		}
+		break; 
+	}
 
 	$OutputParameter = $false;
 
